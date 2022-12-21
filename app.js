@@ -72,15 +72,20 @@ app.post("/validate", function (req, res) {
   //   res.setHeader("Access-Control-Allow-Methods", "POST");
   //   res.setHeader("Content-Type", "application/json");
 
-  let items = validateAnswers(req.body);
-  let data = {
+  // let items = validateAnswers(req.body);
+  // let data = {
+  //   correct_answers: items[0],
+  //   all_answers: items[1],
+  // };
+
+  // // const body = JSON.stringify(data);
+
+  // res.json(body);
+
+  res.json({
     correct_answers: items[0],
     all_answers: items[1],
-  };
-
-  // const body = JSON.stringify(data);
-
-  res.json(body);
+  });
 
   // console.log(req.body);
   // res.send(req.body);
