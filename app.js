@@ -125,12 +125,17 @@ function validateAnswers(data) {
   const allanswers = data["answers"];
   let questionsCorrect = 0;
   let answerKeys = keyMap[data["quiz_key"]];
+
+  if(answerKeys.length < 1){
+    return [-1,allanswers];
+
+  }
   
 
   for (let index = 0; index < allanswers.length; index++) {
     const element = allanswers[index];
 
-    if (answerKeys && answerKeys.includes(element)) {
+    if (answerKeys.includes(element)) {
       console.log("✅ String is contained in Array");
       questionsCorrect++;
     } else {
