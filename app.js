@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { createRequire } from 'module';
+import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 
 const express = require("express");
@@ -12,17 +12,8 @@ app.use(express.json());
 
 const port = 3000;
 
-
 // http://localhost:3000/api?amount=10&category=9&difficulty=easy&type=multiple
 app.get("/api", function (req, res) {
-  //   const queryParams = querystring.parse(req.url);
-  //   const query1 = queryParams.q; // get the value of the "q" query
-
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET'); 
-
-
-
   let amount = req.query.amount;
   let category = req.query.category;
   let difficulty = req.query.difficulty;
@@ -35,7 +26,12 @@ app.get("/api", function (req, res) {
     .then((response) => response.json())
     .then((data) => {
       let strippedData = stripData(data);
-      res.send(strippedData);
+
+      if (strippedData === -1) {
+        res.end(JSON.stringify({ error: "Couldn't fetch questions." }));
+      } else {
+        res.send(strippedData);
+      }
 
       //   res.send(data);
     })
@@ -57,31 +53,31 @@ app.get("/api/:amount/:category/:difficulty/:type/:token", function (req, res) {
 
 // http://localhost:3000/validate/
 app.post("/validate", function (req, res) {
+  res.setHeader("Content-Type", "application/json");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST");
 
-    
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST'); 
-  
   let num = validateAnswers(req.body);
   res.send("Correct questions: " + num);
 
   // console.log(req.body);
   // res.send(req.body);
-
 });
 
 function stripData(jsonResult) {
   let results = jsonResult["results"];
+  if (results.length < 1) {
+    return -1;
+  }
   let correct_answer = [];
 
-//   console.log(results);
+  //   console.log(results);
 
   for (let index = 0; index < results.length; index++) {
     const element = results[index];
     let allAnswers = element["incorrect_answers"];
     allAnswers.push(element["correct_answer"]);
     let correctAnswerNoEntities = decodeHtml(element["correct_answer"]);
-
     correct_answer.push(correctAnswerNoEntities);
     delete element["correct_answer"];
     delete element["incorrect_answers"];
@@ -94,7 +90,6 @@ function stripData(jsonResult) {
   console.log("Correct Answers: " + correct_answer);
   console.log("Quiz Key: " + count);
   count++;
-
 
   return results;
 }
