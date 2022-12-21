@@ -12,18 +12,16 @@ app.use(express.json());
 
 const port = 3000;
 
+app.all("*", function (req, res, next) {
+  if (!req.get("Origin")) return next();
 
-app.all('*',function(req,res,next)
-{
-    if (!req.get('Origin')) return next();
+  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-Methods", "GET,POST");
+  res.set("Access-Control-Allow-Headers", "X-Requested-With,Content-Type");
 
-    res.set('Access-Control-Allow-Origin',"*");
-    res.set('Access-Control-Allow-Methods','GET,POST');
-    res.set('Access-Control-Allow-Headers','X-Requested-With,Content-Type');
+  if ("OPTIONS" == req.method) return res.send(200);
 
-    if ('OPTIONS' == req.method) return res.send(200);
-
-    next();
+  next();
 });
 
 // http://localhost:3000/api?amount=10&category=9&difficulty=easy&type=multiple
@@ -70,17 +68,17 @@ app.get("/api/:amount/:category/:difficulty/:type/:token", function (req, res) {
 
 // http://localhost:3000/validate/
 app.post("/validate", function (req, res) {
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   res.setHeader("Access-Control-Allow-Methods", "POST");
-//   res.setHeader("Content-Type", "application/json");
+  //   res.setHeader("Access-Control-Allow-Origin", "*");
+  //   res.setHeader("Access-Control-Allow-Methods", "POST");
+  //   res.setHeader("Content-Type", "application/json");
 
   let items = validateAnswers(req.body);
   let data = {
     correct_answers: items[0],
-    all_answers: items[1]
+    all_answers: items[1],
   };
 
-  const body = JSON.stringify(data);
+  // const body = JSON.stringify(data);
 
   res.json(body);
 
@@ -126,11 +124,9 @@ function validateAnswers(data) {
   let questionsCorrect = 0;
   let answerKeys = keyMap[data["quiz_key"]];
 
-  if(answerKeys.length < 1){
-    return [-1,allanswers];
-
+  if (answerKeys.length < 1) {
+    return [-1, allanswers];
   }
-  
 
   for (let index = 0; index < allanswers.length; index++) {
     const element = allanswers[index];
@@ -143,7 +139,7 @@ function validateAnswers(data) {
     }
   }
 
-  return [questionsCorrect,allanswers];
+  return [questionsCorrect, allanswers];
 }
 
 function decodeHtml(htmlString) {
