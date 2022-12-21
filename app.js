@@ -75,7 +75,13 @@ app.post("/validate", function (req, res) {
 //   res.setHeader("Content-Type", "application/json");
 
   let num = validateAnswers(req.body);
-  res.send("Correct questions: " + num);
+  let data = {
+    correct_answers: num,
+  };
+
+  const body = JSON.stringify(data);
+
+  res.json(body);
 
   // console.log(req.body);
   // res.send(req.body);
