@@ -72,7 +72,8 @@ app.post("/validate", function (req, res) {
   //   res.setHeader("Access-Control-Allow-Methods", "POST");
   //   res.setHeader("Content-Type", "application/json");
 
-  // let items = validateAnswers(req.body);
+  let items = validateAnswers(req.body);
+  
   // let data = {
   //   correct_answers: items[0],
   //   all_answers: items[1],
@@ -94,6 +95,7 @@ app.post("/validate", function (req, res) {
 function stripData(jsonResult) {
   let results = jsonResult["results"];
   if (results.length < 1) {
+  
     return -1;
   }
   let correct_answer = [];
