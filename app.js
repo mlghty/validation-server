@@ -12,12 +12,25 @@ app.use(express.json());
 
 const port = 3000;
 
+
+app.all('*',function(req,res,next)
+{
+    if (!req.get('Origin')) return next();
+
+    res.set('Access-Control-Allow-Origin','http://myapp.com');
+    res.set('Access-Control-Allow-Methods','GET,POST');
+    res.set('Access-Control-Allow-Headers','X-Requested-With,Content-Type');
+
+    if ('OPTIONS' == req.method) return res.send(200);
+
+    next();
+});
+
 // http://localhost:3000/api?amount=10&category=9&difficulty=easy&type=multiple
 app.get("/api", function (req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET");
 
-    
   let amount = req.query.amount;
   let category = req.query.category;
   let difficulty = req.query.difficulty;
@@ -57,9 +70,9 @@ app.get("/api/:amount/:category/:difficulty/:type/:token", function (req, res) {
 
 // http://localhost:3000/validate/
 app.post("/validate", function (req, res) {
-  res.setHeader("Content-Type", "application/json");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST");
+//   res.setHeader("Access-Control-Allow-Origin", "*");
+//   res.setHeader("Access-Control-Allow-Methods", "POST");
+//   res.setHeader("Content-Type", "application/json");
 
   let num = validateAnswers(req.body);
   res.send("Correct questions: " + num);
