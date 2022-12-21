@@ -1,3 +1,5 @@
+import fetch from "node-fetch";
+
 const express = require("express");
 
 let keyMap = new Map([]);
