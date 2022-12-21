@@ -14,6 +14,10 @@ const port = 3000;
 
 // http://localhost:3000/api?amount=10&category=9&difficulty=easy&type=multiple
 app.get("/api", function (req, res) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET");
+
+    
   let amount = req.query.amount;
   let category = req.query.category;
   let difficulty = req.query.difficulty;
