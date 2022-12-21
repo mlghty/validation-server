@@ -74,9 +74,10 @@ app.post("/validate", function (req, res) {
 //   res.setHeader("Access-Control-Allow-Methods", "POST");
 //   res.setHeader("Content-Type", "application/json");
 
-  let num = validateAnswers(req.body);
+  let items = validateAnswers(req.body);
   let data = {
-    correct_answers: num,
+    correct_answers: items[0],
+    all_answers: items[1]
   };
 
   const body = JSON.stringify(data);
@@ -124,11 +125,12 @@ function validateAnswers(data) {
   const allanswers = data["answers"];
   let questionsCorrect = 0;
   let answerKeys = keyMap[data["quiz_key"]];
+  
 
   for (let index = 0; index < allanswers.length; index++) {
     const element = allanswers[index];
 
-    if (answerKeys.includes(element)) {
+    if (answerKeys && answerKeys.includes(element)) {
       console.log("✅ String is contained in Array");
       questionsCorrect++;
     } else {
@@ -136,7 +138,7 @@ function validateAnswers(data) {
     }
   }
 
-  return questionsCorrect;
+  return [questionsCorrect,allanswers];
 }
 
 function decodeHtml(htmlString) {
