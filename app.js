@@ -18,6 +18,11 @@ app.get("/api", function (req, res) {
   //   const queryParams = querystring.parse(req.url);
   //   const query1 = queryParams.q; // get the value of the "q" query
 
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET'); 
+
+
+
   let amount = req.query.amount;
   let category = req.query.category;
   let difficulty = req.query.difficulty;
@@ -52,6 +57,10 @@ app.get("/api/:amount/:category/:difficulty/:type/:token", function (req, res) {
 
 // http://localhost:3000/validate/
 app.post("/validate", function (req, res) {
+
+    
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST'); 
   
   let num = validateAnswers(req.body);
   res.send("Correct questions: " + num);
