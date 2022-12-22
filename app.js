@@ -24,6 +24,15 @@ app.all("*", function (req, res, next) {
   next();
 });
 
+app.get("/api/:amount/:category/:difficulty/:type/:token", function (req, res) {
+  let amount = req.params.amount;
+  let category = req.params.category;
+  let difficulty = req.params.difficulty;
+  let type = req.params.type;
+  let token = req.params.token;
+  res.send("From express: " + amount + category + difficulty + type + token);
+});
+
 // http://localhost:3000/api?amount=10&category=9&difficulty=easy&type=multiple
 app.get("/api", function (req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -47,60 +56,29 @@ app.get("/api", function (req, res) {
       } else {
         res.send(strippedData);
       }
-
-      //   res.send(data);
     })
     .catch((error) => {
-      // handle errors
       console.error(error);
       res.status(500).send({ error: "Something went wrong" });
     });
 });
 
-app.get("/api/:amount/:category/:difficulty/:type/:token", function (req, res) {
-  let amount = req.params.amount;
-  let category = req.params.category;
-  let difficulty = req.params.difficulty;
-  let type = req.params.type;
-  let token = req.params.token;
-  res.send("From express: " + amount + category + difficulty + type + token);
-});
-
 // http://localhost:3000/validate/
 app.post("/validate", function (req, res) {
-  //   res.setHeader("Access-Control-Allow-Origin", "*");
-  //   res.setHeader("Access-Control-Allow-Methods", "POST");
-  //   res.setHeader("Content-Type", "application/json");
-
   let items = validateAnswers(req.body);
-  
-  // let data = {
-  //   correct_answers: items[0],
-  //   all_answers: items[1],
-  // };
-
-  // // const body = JSON.stringify(data);
-
-  // res.json(body);
 
   res.json({
     correct_answers: items[0],
     all_answers: items[1],
   });
-
-  // console.log(req.body);
-  // res.send(req.body);
 });
 
 function stripData(jsonResult) {
   let results = jsonResult["results"];
   if (results.length < 1) {
-  
     return -1;
   }
   let correct_answer = [];
-
-  //   console.log(results);
 
   for (let index = 0; index < results.length; index++) {
     const element = results[index];
