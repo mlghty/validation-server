@@ -146,7 +146,7 @@ function validateAnswers(data) {
     }
   }
 
-  return [questionsCorrect, allanswers];
+  return [answerKeys, allanswers];
 }
 
 function decodeHtml(htmlString) {
